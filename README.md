@@ -4,6 +4,7 @@ This web application allows users to search for books using the Google Books API
 http://localhost:3000
 
 I.Zainicjuj projekt React
+
 npx create-react-app book-app-frontend --template typescript
 cd book-app-frontend
 npm uninstall react-query

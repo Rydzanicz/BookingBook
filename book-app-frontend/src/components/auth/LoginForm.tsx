@@ -1,109 +1,33 @@
 import React, { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
-import { authAPI, LoginRequest } from '../../api/auth';
 import { useAuth } from '../../context/AuthContext';
 
-interface LoginFormProps {
-  onSuccess?: () => void;
-}
-
-const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
-  const [formData, setFormData] = useState<LoginRequest>({
-    email: '',
-    password: ''
-  });
-  const [errors, setErrors] = useState<Record<string, string>>({});
-
+const LoginForm: React.FC = () => {
   const { login } = useAuth();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
-  const loginMutation = useMutation({
-    mutationFn: authAPI.login,
-    onSuccess: (data) => {
-      login(data.token, data.user);
-      setErrors({});
-      if (onSuccess) onSuccess();
-    },
-    onError: (error: any) => {
-      setErrors({
-        general: error.response?.data?.message || 'Błąd logowania'
-      });
-    }
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setErrors({});
-
-    // Podstawowa walidacja
-    const newErrors: Record<string, string> = {};
-    if (!formData.email) newErrors.email = 'Email jest wymagany';
-    if (!formData.password) newErrors.password = 'Hasło jest wymagane';
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-
-    loginMutation.mutate(formData);
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-    // Wyczyść błąd dla tego pola
-    if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
-    }
+    login(username, password).catch(alert);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="login-form">
-      <div className="form-group">
-        <label htmlFor="email">Email:</label>
+      <form onSubmit={onSubmit}>
         <input
-          type="email"
-          id="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          className={errors.email ? 'error' : ''}
-          required
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+            placeholder="Username"
+            required
         />
-        {errors.email && <span className="error-text">{errors.email}</span>}
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="password">Hasło:</label>
         <input
-          type="password"
-          id="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          className={errors.password ? 'error' : ''}
-          required
+            type="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            placeholder="Password"
+            required
         />
-        {errors.password && <span className="error-text">{errors.password}</span>}
-      </div>
-
-      {errors.general && (
-        <div className="error-message">{errors.general}</div>
-      )}
-
-      <button 
-        type="submit" 
-        disabled={loginMutation.isPending}
-        className="submit-button"
-      >
-        {loginMutation.isPending ? 'Logowanie...' : 'Zaloguj się'}
-      </button>
-    </form>
+        <button type="submit">Log in</button>
+      </form>
   );
 };
 

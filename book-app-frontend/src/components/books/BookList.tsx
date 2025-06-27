@@ -1,29 +1,17 @@
 import React from 'react';
-import { Book } from '../../api/books';
 import BookItem from './BookItem';
 
 interface BookListProps {
-    books: Book[];
+    books: any[];
+    onAdd: (b: any) => void;
 }
 
-const BookList: React.FC<BookListProps> = ({ books }) => {
-    if (!books || books.length === 0) {
-        return (
-            <div className="book-list-empty">
-                <p>Brak książek do wyświetlenia</p>
-            </div>
-        );
-    }
-
-    return (
-        <div className="book-list">
-            <div className="book-grid">
-                {books.map((book) => (
-                    <BookItem key={book.id} book={book} />
-                ))}
-            </div>
-        </div>
-    );
-};
+const BookList: React.FC<BookListProps> = ({ books, onAdd }) => (
+    <ul>
+        {books.map(book => (
+            <BookItem key={book.id} book={book} onAdd={onAdd} />
+        ))}
+    </ul>
+);
 
 export default BookList;
