@@ -1,50 +1,50 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { searchBooks } from '../api/books';
-import { getCollection, addToCollection, removeFromCollection } from '../api/collection';
+import {
+    booksService,
+    GoogleBooksResponse,
+    UserBook,
+    AddBookRequest
+} from '../api/books';
+import { useAuth } from '../context/AuthContext';
 
-export interface GoogleBook {
-    id: string;
-    volumeInfo: {
-        title: string;
-        authors?: string[];
-        description?: string;
-        publishedDate?: string;
-        pageCount?: number;
-        categories?: string[];
-        imageLinks?: { thumbnail?: string };
-    };
-}
-
-export interface SearchBooksResponse {
-    totalItems: number;
-    items: GoogleBook[];
-}
-
+// Wyszukiwanie książek z paginacją
 export const useBookSearch = (query: string, page: number) =>
-    useQuery<SearchBooksResponse>({
+    useQuery<GoogleBooksResponse>({
         queryKey: ['searchBooks', query, page],
-        queryFn: () => searchBooks(query, page, 10).then(res => res.data),
-        enabled: !!query
+        queryFn: () => booksService.searchBooks(query, page * 20, 20),
+        enabled: !!query,
+        staleTime: 5 * 60 * 1000
     });
 
-export const useAddBook = () => {
-    const qc = useQueryClient();
-    return useMutation({
-        mutationFn: (book: any) => addToCollection(book).then(res => res.data),
-        onSuccess: () => qc.invalidateQueries({ queryKey: ['collection'] })
+// Pobranie kolekcji użytkownika
+export const useCollection = () => {
+    const { user } = useAuth();
+    return useQuery<UserBook[]>({
+        queryKey: ['userBooks', user!.username],
+        queryFn: () => booksService.getUserBooks(user!.username),
+        enabled: !!user
     });
 };
 
-export const useCollection = () =>
-    useQuery<GoogleBook[]>({
-        queryKey: ['collection'],
-        queryFn: () => getCollection().then(res => res.data)
+// Dodawanie książki
+export const useAddBook = () => {
+    const queryClient = useQueryClient();
+    return useMutation<UserBook, Error, AddBookRequest>({
+        mutationFn: (bookData) => booksService.addBookToCollection(bookData),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['userBooks'] });
+        }
     });
+};
 
+// Usuwanie książki
 export const useRemoveBook = () => {
-    const qc = useQueryClient();
-    return useMutation({
-        mutationFn: (id: string) => removeFromCollection(id).then(res => res.data),
-        onSuccess: () => qc.invalidateQueries({ queryKey: ['collection'] })
+    const queryClient = useQueryClient();
+    return useMutation<void, Error, { username: string; googleBookId: string }>({
+        mutationFn: ({ username, googleBookId }) =>
+            booksService.removeBookFromCollection(username, googleBookId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['userBooks'] });
+        }
     });
 };

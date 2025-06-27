@@ -1,58 +1,38 @@
-import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
+const API_BASE_URL = process.env.REACT_APP_API_URL;
+const API_KEY        = process.env.REACT_APP_API_KEY;
 
-class ApiClient {
-    private instance: AxiosInstance;
-
-    constructor() {
-        this.instance = axios.create({
-            baseURL: `${API_BASE_URL}/api`,
-            headers: { 'Content-Type': 'application/json' }
-        });
-        this.setupInterceptors();
+export const api: AxiosInstance = axios.create({
+    baseURL: API_BASE_URL,
+    timeout: 10000,
+    headers: {
+        'Content-Type': 'application/json',
+        'X-API-KEY': API_KEY
     }
+});
 
-    private setupInterceptors() {
-        // Dołączanie JWT do każdego żądania
-        this.instance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-            const token = localStorage.getItem('accessToken');
-            if (token) config.headers!.Authorization = `Bearer ${token}`;
-            return config;
-        });
+// Interceptor żądań – dodaje JWT i X-API-KEY do nagłówków
+api.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('userToken');
+        if (token && config.headers) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        // X-API-KEY już ustawione w domyślnych nagłówkach
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
 
-        // Obsługa odświeżania tokena przy 401
-        this.instance.interceptors.response.use(
-            (response: AxiosResponse) => response,
-            async (error) => {
-                const original = error.config;
-                if (
-                    error.response?.status === 401 &&
-                    !original._retry
-                ) {
-                    original._retry = true;
-                    try {
-                        const rt = localStorage.getItem('refreshToken');
-                        if (!rt) throw new Error('Brak refresh token');
-                        const { data } = await axios.post(
-                            `${API_BASE_URL}/api/auth/refreshtoken`,
-                            { refreshToken: rt }
-                        );
-                        localStorage.setItem('accessToken', data.accessToken);
-                        return this.instance(original);
-                    } catch {
-                        localStorage.clear();
-                        window.location.href = '/login';
-                    }
-                }
-                return Promise.reject(error);
-            }
-        );
+// Interceptor odpowiedzi – obsługa 401
+api.interceptors.response.use(
+    (response: AxiosResponse) => response,
+    (error) => {
+        if (error.response?.status === 401) {
+            localStorage.removeItem('userToken');
+            window.location.href = '/login';
+        }
+        return Promise.reject(error);
     }
-
-    get client() {
-        return this.instance;
-    }
-}
-
-export const api = new ApiClient().client;
+);

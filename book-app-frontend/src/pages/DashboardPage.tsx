@@ -1,5 +1,5 @@
 import React from 'react';
-import BookSearch from '../components/books/BookSearch';
+import BookSearch from '../components/auth/BookSearch';
 import CollectionList from '../components/collection/CollectionList';
 
 const DashboardPage: React.FC = () => (

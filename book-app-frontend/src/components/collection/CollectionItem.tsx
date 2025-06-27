@@ -1,23 +1,28 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useRemoveBook } from '../../hooks/useBooks';
+import { useAuth } from '../../context/AuthContext';
+import { UserBook } from '../../api/books';
 
 interface CollectionItemProps {
-  book: {
-    googleBookId: string;
-    title: string;
-  };
+    book: UserBook;
 }
 
 const CollectionItem: React.FC<CollectionItemProps> = ({ book }) => {
-  const remove = useRemoveBook();
-  const [show, setShow] = useState(false);
+    const { user }   = useAuth();
+    const removeBook = useRemoveBook();
 
-  return (
-      <div>
-        <h3>{book.title}</h3>
-        <button onClick={() => remove.mutate(book.googleBookId)}>Remove</button>
-      </div>
-  );
+    return (
+        <div>
+            <h3>{book.title}</h3>
+            <button
+                onClick={() =>
+                    removeBook.mutate({ username: user!.username, googleBookId: book.googleBookId })
+                }
+            >
+                Usuń z kolekcji
+            </button>
+        </div>
+    );
 };
 
 export default CollectionItem;
