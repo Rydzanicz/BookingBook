@@ -7,7 +7,6 @@ import {
 } from '../api/books';
 import { useAuth } from '../context/AuthContext';
 
-// Wyszukiwanie książek z paginacją
 export const useBookSearch = (query: string, page: number) =>
     useQuery<GoogleBooksResponse>({
         queryKey: ['searchBooks', query, page],
@@ -16,7 +15,6 @@ export const useBookSearch = (query: string, page: number) =>
         staleTime: 5 * 60 * 1000
     });
 
-// Pobranie kolekcji użytkownika
 export const useCollection = () => {
     const { user } = useAuth();
     return useQuery<UserBook[]>({
@@ -26,7 +24,6 @@ export const useCollection = () => {
     });
 };
 
-// Dodawanie książki
 export const useAddBook = () => {
     const queryClient = useQueryClient();
     return useMutation<UserBook, Error, AddBookRequest>({
@@ -37,7 +34,6 @@ export const useAddBook = () => {
     });
 };
 
-// Usuwanie książki
 export const useRemoveBook = () => {
     const queryClient = useQueryClient();
     return useMutation<void, Error, { username: string; googleBookId: string }>({

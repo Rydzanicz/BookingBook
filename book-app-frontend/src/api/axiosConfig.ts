@@ -1,38 +1,22 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL;
-const API_KEY        = process.env.REACT_APP_API_KEY;
+axios.defaults.baseURL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
-export const api: AxiosInstance = axios.create({
-    baseURL: API_BASE_URL,
-    timeout: 10000,
-    headers: {
-        'Content-Type': 'application/json',
-        'X-API-KEY': API_KEY
-    }
-});
+const apiKey = process.env.REACT_APP_API_KEY || 'xd';
 
-// Interceptor żądań – dodaje JWT i X-API-KEY do nagłówków
-api.interceptors.request.use(
+axios.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem('userToken');
-        if (token && config.headers) {
+        const token = localStorage.getItem('authToken');
+        if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
-        // X-API-KEY już ustawione w domyślnych nagłówkach
+        if (apiKey) {
+            config.headers['X-API-KEY'] = apiKey;
+        }
         return config;
     },
     (error) => Promise.reject(error)
 );
 
-// Interceptor odpowiedzi – obsługa 401
-api.interceptors.response.use(
-    (response: AxiosResponse) => response,
-    (error) => {
-        if (error.response?.status === 401) {
-            localStorage.removeItem('userToken');
-            window.location.href = '/login';
-        }
-        return Promise.reject(error);
-    }
-);
+export default axios;
+export const api = axios;

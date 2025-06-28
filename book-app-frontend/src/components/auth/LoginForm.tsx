@@ -1,5 +1,3 @@
-// src/components/LoginForm.tsx
-
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {useAuth} from "../../context/AuthContext";
@@ -13,9 +11,6 @@ const LoginForm: React.FC = () => {
     const navigate  = useNavigate();
     const location  = useLocation();
 
-    // Celowa ścieżka po zalogowaniu – jeśli użytkownik
-    // przyszedł z przekierowania, wróci do „location.state.from”,
-    // inaczej idzie na /search (strona wyszukiwania książek).
     const from = (location.state as any)?.from?.pathname || '/search';
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +24,6 @@ const LoginForm: React.FC = () => {
 
         try {
             await login(formData.username, formData.password);
-            // Przekieruj na stronę wyszukiwania po udanym logowaniu
             navigate(from, { replace: true });
         } catch (err: any) {
             setError(err.response?.data?.message || 'Błąd logowania');

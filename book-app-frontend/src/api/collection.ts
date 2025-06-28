@@ -1,4 +1,4 @@
-import { api } from './axiosConfig';
+import {api} from "./axiosConfig";
 
 export const getCollection = () =>
     api.get('/books/collection');

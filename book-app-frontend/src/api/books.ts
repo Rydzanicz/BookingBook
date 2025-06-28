@@ -1,4 +1,4 @@
-import { api } from './axiosConfig';
+import {api} from "./axiosConfig";
 
 export interface GoogleBook {
     id: string;
