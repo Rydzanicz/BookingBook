@@ -1,6 +1,8 @@
+// src/components/BookSearch.tsx
 
 import React, { useState, FormEvent, ChangeEvent } from 'react';
 import axios from '../api/axiosConfig';
+import BookTable from './BookTable';
 
 interface Book {
     googleBookId: string;
@@ -15,6 +17,7 @@ const BookSearch: React.FC = () => {
     const [books, setBooks] = useState<Book[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
+    const username = localStorage.getItem('username') || '';
 
     const handleSearch = async (e: FormEvent) => {
         e.preventDefault();
@@ -59,41 +62,7 @@ const BookSearch: React.FC = () => {
 
             {error && <div style={{ color: 'red', marginBottom: 16 }}>{error}</div>}
 
-            {/* Tabela wyników */}
-            {books.length > 0 && (
-                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                    <thead>
-                    <tr>
-                        <th style={{ border: '1px solid #ddd', padding: 8 }}>ID</th>
-                        <th style={{ border: '1px solid #ddd', padding: 8 }}>Tytuł</th>
-                        <th style={{ border: '1px solid #ddd', padding: 8 }}>Autorzy</th>
-                        <th style={{ border: '1px solid #ddd', padding: 8 }}>Data publikacji</th>
-                        <th style={{ border: '1px solid #ddd', padding: 8 }}>Opis</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {books.map(book => (
-                        <tr key={book.googleBookId}>
-                            <td style={{ border: '1px solid #ddd', padding: 8 }}>{book.googleBookId}</td>
-                            <td style={{ border: '1px solid #ddd', padding: 8 }}>{book.title}</td>
-                            <td style={{ border: '1px solid #ddd', padding: 8 }}>
-                                {book.authors?.length ? book.authors.join(', ') : '-'}
-                            </td>
-                            <td style={{ border: '1px solid #ddd', padding: 8 }}>
-                                {book.publishedDate || '-'}
-                            </td>
-                            <td style={{ border: '1px solid #ddd', padding: 8 }}>
-                                {book.description
-                                    ? book.description.length > 100
-                                        ? book.description.slice(0, 100) + '…'
-                                        : book.description
-                                    : '-'}
-                            </td>
-                        </tr>
-                    ))}
-                    </tbody>
-                </table>
-            )}
+            <BookTable books={books} username={username} />
         </div>
     );
 };
