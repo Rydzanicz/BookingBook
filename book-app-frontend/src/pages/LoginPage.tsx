@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from '../api/axiosConfig';
 
 interface LoginResponse {
@@ -45,34 +45,45 @@ const LoginPage: React.FC = () => {
     };
 
     return (
-        <div style={{ maxWidth: 400, margin: '100px auto', padding: 20, border: '1px solid #ddd', borderRadius: 4 }}>
-            <h2>Logowanie</h2>
-            {error && <div style={{ color: 'red', marginBottom: 10 }}>{error}</div>}
+        <div className="vista-card" style={{ maxWidth: 400, margin: '100px auto' }}>
+            <h2 style={{ color: '#fff', textAlign: 'center' }}>Logowanie</h2>
+            {error && <div style={{ color: 'red', marginBottom: 10, textAlign: 'center' }}>{error}</div>}
             <form onSubmit={handleSubmit}>
                 <div style={{ marginBottom: 10 }}>
                     <input
+                        className="vista-input"
                         type="text"
                         placeholder="Nazwa użytkownika"
                         value={username}
                         onChange={e => setUsername(e.target.value)}
                         required
-                        style={{ width: '100%', padding: 8 }}
                     />
                 </div>
                 <div style={{ marginBottom: 10 }}>
                     <input
+                        className="vista-input"
                         type="password"
                         placeholder="Hasło"
                         value={password}
                         onChange={e => setPassword(e.target.value)}
                         required
-                        style={{ width: '100%', padding: 8 }}
                     />
                 </div>
-                <button type="submit" disabled={loading} style={{ width: '100%', padding: 10 }}>
+                <button
+                    type="submit"
+                    className="vista-button"
+                    disabled={loading}
+                    style={{ width: '100%', marginBottom: 10 }}
+                >
                     {loading ? 'Logowanie...' : 'Zaloguj się'}
                 </button>
             </form>
+            <div style={{ textAlign: 'center', marginTop: 16 }}>
+                <span style={{ color: '#fff' }}>Nie masz konta?</span>
+                <Link to="/register" className="vista-button" style={{ marginLeft: 8, padding: '6px 12px' }}>
+                    Zarejestruj się
+                </Link>
+            </div>
         </div>
     );
 };
