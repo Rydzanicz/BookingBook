@@ -62,8 +62,13 @@ const BookSearch: React.FC = () => {
 
             {error && <div style={{ color: 'red', marginBottom: 16 }}>{error}</div>}
 
-            <BookTable books={books} username={username} />
-        </div>
+            <BookTable
+                books={books}
+                username={username}
+                buttonLabel="Dodaj do kolekcji"
+                apiPath="/api/books/collection/add"
+                apiType = "POST"
+            /></div>
     );
 };
 

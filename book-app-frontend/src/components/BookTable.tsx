@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import axios from '../api/axiosConfig';
 
 interface Book {
@@ -12,22 +12,29 @@ interface Book {
 interface BookTableProps {
     books: Book[];
     username: string;
+    buttonLabel?: string;
+    apiPath?: string;
+    apiType?: 'POST' | 'DELETE' | 'PUT' | 'PATCH';
 }
 
-const BookTable: React.FC<BookTableProps> = ({books, username}) => {
+const BookTable: React.FC<BookTableProps> = ({
+                                                 books,
+                                                 username,
+                                                 buttonLabel = "Dodaj",
+                                                 apiPath = "/api/books/collection/add",
+                                                 apiType = "POST"
+                                             }) => {
     const [message, setMessage] = useState<string | null>(null);
 
-    const handleAdd = async (book: Book) => {
+    const handleAction = async (book: Book) => {
         setMessage(null);
         if (!username) {
             setMessage('Brak zalogowanego użytkownika!');
             return;
         }
 
-        console.log(username);
-
         try {
-            const addBookRequest = {
+            const requestData = {
                 googleBookId: book.googleBookId,
                 title: book.title,
                 username: username,
@@ -35,17 +42,24 @@ const BookTable: React.FC<BookTableProps> = ({books, username}) => {
                 description: book.description,
                 publishedDate: book.publishedDate
             };
-            console.log(addBookRequest);
-            const response = await axios.post('/api/books/collection/add', addBookRequest, {
-                headers: {'Content-Type': 'application/json'}
-            });
-
-            setMessage(response.data.message || 'Dodano książkę!');
+            let response;
+            switch(apiType) {
+                case 'DELETE':
+                    response = await axios.delete(apiPath, {
+                        data: requestData
+                    });
+                    break;
+                default:
+                    response = await axios.post(apiPath, requestData, {
+                        headers: {'Content-Type': 'application/json'}
+                    });
+            }
+            setMessage(response.data.message || 'Operacja zakończona sukcesem!');
         } catch (err: any) {
             setMessage(
                 err.response?.data?.error ||
                 err.response?.data?.message ||
-                'Błąd podczas dodawania książki'
+                'Błąd podczas wykonywania operacji'
             );
         }
     };
@@ -96,9 +110,9 @@ const BookTable: React.FC<BookTableProps> = ({books, username}) => {
                             <button
                                 className="vista-button"
                                 style={{padding: '6px 12px', fontSize: 14}}
-                                onClick={() => handleAdd(book)}
+                                onClick={() => handleAction(book)}
                             >
-                                Dodaj
+                                {buttonLabel}
                             </button>
                         </td>
                     </tr>
