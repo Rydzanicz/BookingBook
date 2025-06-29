@@ -8,6 +8,7 @@ interface Book {
     authors: string[] | null;
     description: string | null;
     publishedDate: string | null;
+    pdfAcsTokenLink: string | null;
 }
 
 const BookSearch: React.FC = () => {

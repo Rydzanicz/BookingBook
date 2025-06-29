@@ -7,6 +7,7 @@ interface Book {
     authors: string[] | null;
     description: string | null;
     publishedDate: string | null;
+    pdfAcsTokenLink: string | null;
 }
 
 interface BookTableProps {
@@ -44,7 +45,8 @@ const BookTable: React.FC<BookTableProps> = ({
                 username: username,
                 authors: book.authors ? book.authors.join(', ') : '',
                 description: book.description,
-                publishedDate: book.publishedDate
+                publishedDate: book.publishedDate,
+                pdfAcsTokenLink: book.pdfAcsTokenLink
             };
             let response;
             switch(apiType) {
@@ -71,6 +73,10 @@ const BookTable: React.FC<BookTableProps> = ({
         }
     };
 
+    const handleDownload = (link: string) => {
+        window.open(link, '_blank');
+    };
+
     if (books.length === 0) return null;
 
     return (
@@ -95,6 +101,9 @@ const BookTable: React.FC<BookTableProps> = ({
                     <th style={cellStyle}>Data publikacji</th>
                     <th style={cellStyle}>Opis</th>
                     <th style={cellStyle}>Akcja</th>
+                    {books.some(book => book.pdfAcsTokenLink) && (
+                        <th style={cellStyle}>Pobierz</th>
+                    )}
                 </tr>
                 </thead>
                 <tbody>
@@ -122,6 +131,20 @@ const BookTable: React.FC<BookTableProps> = ({
                                 {buttonLabel}
                             </button>
                         </td>
+                        {book.pdfAcsTokenLink && (
+                            <td style={cellStyle}>
+                                <button
+                                    className="vista-button"
+                                    style={{padding: '6px 12px', fontSize: 14}}
+                                    onClick={() => handleDownload(book.pdfAcsTokenLink!)}
+                                >
+                                    Pobierz plik
+                                </button>
+                            </td>
+                        )}
+                        {!book.pdfAcsTokenLink && books.some(b => b.pdfAcsTokenLink) && (
+                            <td style={cellStyle}></td>
+                        )}
                     </tr>
                 ))}
                 </tbody>
