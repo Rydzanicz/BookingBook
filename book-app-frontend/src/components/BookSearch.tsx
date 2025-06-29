@@ -1,6 +1,7 @@
-import React, { useState, FormEvent, ChangeEvent } from 'react';
+import React, { useState, FormEvent, ChangeEvent, useCallback } from 'react';
 import axios from '../api/axiosConfig';
 import BookTable from './BookTable';
+import { useInfiniteScroll } from '../hooks/useInfiniteScroll';
 
 interface Book {
     googleBookId: string;
@@ -11,37 +12,70 @@ interface Book {
     pdfAcsTokenLink: string | null;
 }
 
+interface SpringDataPage {
+    content: Book[];
+    totalElements: number;
+    totalPages: number;
+    size: number;
+    number: number;
+    last: boolean;
+}
+
 const BookSearch: React.FC = () => {
-    const [query, setQuery] = useState<string>('');
+    const [query, setQuery] = useState('');
     const [books, setBooks] = useState<Book[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string>('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [page, setPage] = useState(0);
+    const [hasMore, setHasMore] = useState(false);
+
     const username = localStorage.getItem('username') || '';
 
-    const handleSearch = async (e: FormEvent) => {
-        e.preventDefault();
-        if (!query.trim()) return;
-
-        setBooks([]);
-        setError('');
+    const fetchBooks = useCallback(async (newQuery: string, nextPage: number, reset: boolean = false) => {
         setLoading(true);
-
         try {
-            const response = await axios.get<Book[]>(
-                `/api/google/search?query=${encodeURIComponent(query)}`,
-                { params: { _ts: Date.now() } }
-            );
-            setBooks(response.data || []);
-        } catch (err: any) {
-            console.error(err);
+            const res = await axios.get<SpringDataPage>('/api/google/search', {
+                params: {
+                    query: newQuery,
+                    page: nextPage,
+                    size: 5,
+                    _ts: Date.now()
+                }
+            });
+            const newItems = res.data.content || [];
+            setBooks(prev => reset ? newItems : [...prev, ...newItems]);
+            setHasMore(!res.data.last);
+            setPage(nextPage);
+            setError('');
+        } catch {
             setError('Błąd podczas pobierania książek');
         } finally {
             setLoading(false);
         }
+    }, []);
+
+    const handleSearch = async (e: FormEvent) => {
+        e.preventDefault();
+        if (!query.trim()) return;
+        setBooks([]);
+        await fetchBooks(query, 0, true);
     };
+
+    const fetchMore = useCallback(async () => {
+        if (hasMore && !loading) {
+            await fetchBooks(query, page + 1);
+        }
+    }, [query, page, hasMore, loading, fetchBooks]);
+
+    const { isFetching } = useInfiniteScroll({ fetchMore, hasMore, loading });
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         setQuery(e.target.value);
+        if (!e.target.value.trim()) {
+            setBooks([]);
+            setHasMore(false);
+            setPage(0);
+        }
     };
 
     return (
@@ -54,7 +88,11 @@ const BookSearch: React.FC = () => {
                     onChange={handleInputChange}
                     style={{ flex: 1, padding: 8, fontSize: 16 }}
                 />
-                <button type="submit" disabled={loading || !query.trim()} style={{ padding: '8px 16px' }}>
+                <button
+                    type="submit"
+                    disabled={loading || !query.trim()}
+                    style={{ padding: '8px 16px' }}
+                >
                     {loading ? 'Szukam...' : 'Szukaj'}
                 </button>
             </form>
@@ -66,8 +104,21 @@ const BookSearch: React.FC = () => {
                 username={username}
                 buttonLabel="Dodaj do kolekcji"
                 apiPath="/api/books/collection/add"
-                apiType = "POST"
-            /></div>
+                apiType="POST"
+            />
+
+            {(loading || isFetching) && (
+                <div style={{ textAlign: 'center', padding: 20, color: '#555' }}>
+                    Ładowanie...
+                </div>
+            )}
+
+            {!hasMore && books.length > 0 && (
+                <div style={{ textAlign: 'center', padding: 20, color: '#555' }}>
+                    Koniec wyników
+                </div>
+            )}
+        </div>
     );
 };
 
