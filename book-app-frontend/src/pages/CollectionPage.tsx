@@ -45,22 +45,24 @@ const CollectionPage: React.FC = () => {
     }, [username]);
 
     return (
-        <div className="vista-card" style={{maxWidth: 800, margin: '40px auto', padding: 24}}>
+        <>
             <Header/>
-            <h2 style={{color: '#fff', marginBottom: 12}}>Moja kolekcja</h2>
+            <div className="vista-card" style={{maxWidth: 800, margin: '40px auto', padding: 24}}>
+                <h2 style={{color: '#fff', marginBottom: 12}}>Moja kolekcja</h2>
 
-            {error && <div style={{color: 'red', marginBottom: 16}}>{error}</div>}
+                {error && <div style={{color: 'red', marginBottom: 16}}>{error}</div>}
 
-            <BookTable
-                books={books}
-                username={username}
-                buttonLabel="Usuń"
-                apiPath="/api/books/collection"
-                apiType="DELETE"
-                shouldRefresh={true}
-                onRefresh={fetchCollectionData}
-            />
-        </div>
+                <BookTable
+                    books={books}
+                    username={username}
+                    buttonLabel="Usuń"
+                    apiPath="/api/books/collection"
+                    apiType="DELETE"
+                    shouldRefresh={true}
+                    onRefresh={fetchCollectionData}
+                />
+            </div>
+        </>
     );
 };
 

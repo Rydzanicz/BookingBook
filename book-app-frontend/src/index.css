@@ -1,4 +1,3 @@
-/* globalne ustawienia, ciemne tło */
 html, body, #root {
   height: 100%;
   margin: 0;
@@ -14,7 +13,6 @@ body {
   color: #e0e0e0;
 }
 
-/* przezroczyste okna i karty w ciemnym stylu */
 .vista-window {
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(10px);
@@ -31,7 +29,6 @@ body {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
 }
 
-/* formularze i przyciski */
 .vista-input {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -52,7 +49,7 @@ body {
   padding: 8px 16px;
   cursor: pointer;
   font-size: 16px;
-  width: 95%;
+  max-width: 146px;
   transition: background 0.3s;
 }
 
@@ -65,7 +62,6 @@ body {
   background: rgba(255, 255, 255, 0.2);
 }
 
-/* tabela z ciemnym stylem i rozwijanymi wierszami */
 .vista-table-container {
   max-height: 60vh;
   overflow-y: auto;
@@ -96,7 +92,6 @@ body {
   color: #e0e0e0;
 }
 
-/* naprzemienne tło wierszy */
 .vista-table tbody tr:nth-child(even) {
   background: rgba(255, 255, 255, 0.05);
 }
@@ -105,31 +100,26 @@ body {
   background: rgba(0, 0, 0, 0.3);
 }
 
-/* efekt hover */
 .vista-table tbody tr:hover {
   background: rgba(255, 255, 255, 0.1);
   cursor: pointer;
 }
 
-/* wiersz rozwijany - domyślnie ukryty */
 .vista-table .expandable {
   display: none;
 }
 
-/* gdy wiersz ma klasę .expanded, pokazujemy kolejny wiersz */
 .vista-table tbody tr.expanded + tr.expandable {
   display: table-row;
   background: rgba(0, 0, 0, 0.5);
 }
 
-/* komórki w rozwiniętym wierszu */
 .vista-table tbody tr.expandable td {
   padding: 16px;
   font-style: italic;
   color: #ccc;
 }
 
-/* pasek przewijania w ciemnych kolorach */
 .vista-table-container::-webkit-scrollbar {
   width: 8px;
 }
@@ -146,4 +136,73 @@ body {
 
 .vista-table-container::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.3);
+}
+
+:root {
+  --vista-header-bg: rgba(18, 18, 24, 0.85);
+  --vista-header-blur: 16px;
+  --vista-header-shadow: 0 4px 16px rgba(0, 0, 0, 0.8);
+  --vista-header-border: 1px solid rgba(255, 255, 255, 0.1);
+  --vista-header-radius: 0 0 12px 12px;
+  --vista-link-color: #e0e0e0;
+  --vista-link-active: #80E6B3;
+  --vista-link-active-bg: rgba(128, 230, 179, 0.15);
+  --vista-link-hover-bg: rgba(255, 255, 255, 0.08);
+  --vista-btn-bg: rgba(34, 34, 40, 0.8);
+  --vista-btn-hover-bg: rgba(48, 48, 60, 0.9);
+  --vista-btn-border: 1px solid rgba(255, 255, 255, 0.2);
+  --vista-btn-shadow: 0 0 8px rgba(128, 230, 179, 0.4);
+}
+
+.vista-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: var(--vista-header-bg);
+  backdrop-filter: blur(var(--vista-header-blur));
+  -webkit-backdrop-filter: blur(var(--vista-header-blur));
+  border-bottom: var(--vista-header-border);
+  box-shadow: var(--vista-header-shadow);
+  border-radius: var(--vista-header-radius);
+  z-index: 1000;
+}
+
+.vista-nav {
+  display: flex;
+  gap: 20px;
+}
+
+.vista-link {
+  color: var(--vista-link-color);
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 6px 10px;
+  border-radius: 4px;
+  transition: background 0.2s, color 0.2s;
+}
+.vista-link:hover {
+  background: var(--vista-link-hover-bg);
+}
+.vista-link.active {
+  color: var(--vista-link-active);
+  background: var(--vista-link-active-bg);
+}
+
+.vista-button {
+  background: var(--vista-btn-bg);
+  border: var(--vista-btn-border);
+  border-radius: 6px;
+  padding: 6px 16px;
+  color: #e0e0e0;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.vista-button:hover {
+  background: var(--vista-btn-hover-bg);
+  box-shadow: var(--vista-btn-shadow);
 }

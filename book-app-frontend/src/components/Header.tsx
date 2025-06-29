@@ -1,41 +1,33 @@
 import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import {NavLink, useNavigate} from 'react-router-dom';
 import '../index.css';
 
 const Header: React.FC = () => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('tokenType');
-        localStorage.removeItem('userId');
-        localStorage.removeItem('username');
-        localStorage.removeItem('email');
+        ['authToken', 'tokenType', 'userId', 'username', 'email']
+            .forEach(key => localStorage.removeItem(key));
         navigate('/login');
     };
 
-    const linkStyle = ({ isActive }: { isActive: boolean }) => ({
-        color: isActive ? '#00c' : '#fff',
-        textDecoration: 'none',
-        margin: '0 12px',
-        fontWeight: isActive ? 'bold' : 'normal'
-    });
-
     return (
-        <header
-            className="vista-card"
-            style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginBottom: 24
-            }}
-        >
-            <nav style={{ display: 'flex', alignItems: 'center' }}>
-                <NavLink to="/dashboard" style={linkStyle}>
+        <header className="vista-header">
+            <nav className="vista-nav">
+                <NavLink
+                    to="/dashboard"
+                    className={({isActive}) =>
+                        `vista-link${isActive ? ' active' : ''}`
+                    }
+                >
                     Dashboard
                 </NavLink>
-                <NavLink to="/collection" style={linkStyle}>
+                <NavLink
+                    to="/collection"
+                    className={({isActive}) =>
+                        `vista-link${isActive ? ' active' : ''}`
+                    }
+                >
                     Kolekcja
                 </NavLink>
             </nav>
