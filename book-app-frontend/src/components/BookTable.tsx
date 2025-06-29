@@ -14,7 +14,9 @@ interface BookTableProps {
     username: string;
     buttonLabel?: string;
     apiPath?: string;
-    apiType?: 'POST' | 'DELETE' | 'PUT' | 'PATCH';
+    apiType?: 'POST' | 'DELETE';
+    shouldRefresh?: boolean;
+    onRefresh?: () => void;
 }
 
 const BookTable: React.FC<BookTableProps> = ({
@@ -22,7 +24,9 @@ const BookTable: React.FC<BookTableProps> = ({
                                                  username,
                                                  buttonLabel = "Dodaj",
                                                  apiPath = "/api/books/collection/add",
-                                                 apiType = "POST"
+                                                 apiType = "POST",
+                                                 shouldRefresh = false,
+                                                 onRefresh
                                              }) => {
     const [message, setMessage] = useState<string | null>(null);
 
@@ -55,6 +59,9 @@ const BookTable: React.FC<BookTableProps> = ({
                     });
             }
             setMessage(response.data.message || 'Operacja zakończona sukcesem!');
+            if (shouldRefresh && onRefresh) {
+                onRefresh();
+            }
         } catch (err: any) {
             setMessage(
                 err.response?.data?.error ||

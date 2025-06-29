@@ -1,5 +1,3 @@
-// src/components/BookSearch.tsx
-
 import React, { useState, FormEvent, ChangeEvent } from 'react';
 import axios from '../api/axiosConfig';
 import BookTable from './BookTable';

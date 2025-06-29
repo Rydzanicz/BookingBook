@@ -16,28 +16,31 @@ const CollectionPage: React.FC = () => {
     const [error, setError] = useState<string>('');
     const username = localStorage.getItem('username') || '';
 
-    useEffect(() => {
+    const fetchCollectionData = async () => {
         if (!username) {
             setError('Brak nazwy użytkownika.');
             return;
         }
 
-        axios.get<Book[]>(`/api/books/collection`, {
-            params: {username}
-        })
-            .then(resp => {
-                const booksWithAuthorsArray = resp.data.map(book => ({
-                    ...book,
-                    authors: book.authors && typeof book.authors === 'string'
-                        ? (book.authors as string).split(',').map((a: string) => a.trim())
-                        : book.authors
-                }));
-                setBooks(booksWithAuthorsArray);
-            })
-            .catch(err => {
-                console.error('Błąd pobierania kolekcji:', err);
-                setError('Nie udało się pobrać kolekcji książek.');
+        try {
+            const response = await axios.get<Book[]>(`/api/books/collection`, {
+                params: {username}
             });
+            const booksWithAuthorsArray = response.data.map(book => ({
+                ...book,
+                authors: book.authors && typeof book.authors === 'string'
+                    ? (book.authors as string).split(',').map((a: string) => a.trim())
+                    : book.authors
+            }));
+            setBooks(booksWithAuthorsArray);
+        } catch (err) {
+            console.error('Błąd pobierania kolekcji:', err);
+            setError('Nie udało się pobrać kolekcji książek.');
+        }
+    };
+
+    useEffect(() => {
+        fetchCollectionData();
     }, [username]);
 
     return (
@@ -50,10 +53,13 @@ const CollectionPage: React.FC = () => {
             <BookTable
                 books={books}
                 username={username}
-                buttonLabel="Usuń z kolekcji"
+                buttonLabel="Usuń"
                 apiPath="/api/books/collection"
-                apiType = "DELETE"
-            /></div>
+                apiType="DELETE"
+                shouldRefresh={true}
+                onRefresh={fetchCollectionData}
+            />
+        </div>
     );
 };
 
