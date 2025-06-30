@@ -38,7 +38,12 @@ const LoginPage: React.FC = () => {
 
             navigate('/dashboard');
         } catch (err: any) {
-            setError(err.response?.data?.message || 'Błąd logowania');
+            if (axios.isAxiosError(err) && err.response?.status === 429) {
+                setError('Przekroczono limit zapytań. Spróbuj ponownie za chwilę.');
+            } else {
+                console.error('Błąd logowania:', err);
+                setError('Błąd logowania.');
+            }
         } finally {
             setLoading(false);
         }

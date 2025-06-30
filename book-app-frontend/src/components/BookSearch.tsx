@@ -47,8 +47,13 @@ const BookSearch: React.FC = () => {
             setHasMore(!res.data.last);
             setPage(nextPage);
             setError('');
-        } catch {
-            setError('Błąd podczas pobierania książek');
+        } catch (err) {
+            if (axios.isAxiosError(err) && err.response?.status === 429) {
+                setError('Przekroczono limit zapytań. Spróbuj ponownie za chwilę.');
+            } else {
+                console.error('Błąd pobierania książek:', err);
+                setError('Błąd podczas pobierania książek');
+            }
         } finally {
             setLoading(false);
         }

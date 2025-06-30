@@ -30,8 +30,12 @@ const RegisterPage: React.FC = () => {
             setSuccess(response.data.message);
             setTimeout(() => navigate('/login'), 1500);
         } catch (err: any) {
-            const msg = err.response?.data?.message || err.response?.data?.error;
-            setError(msg || 'Nieznany błąd rejestracji');
+            if (axios.isAxiosError(err) && err.response?.status === 429) {
+                setError('Przekroczono limit zapytań. Spróbuj ponownie za chwilę.');
+            } else {
+                console.error('Błąd rejstracji:', err);
+                setError('Błąd rejstracji.');
+            }
         } finally {
             setLoading(false);
         }

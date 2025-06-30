@@ -35,10 +35,14 @@ const CollectionPage: React.FC = () => {
             }));
             setBooks(booksWithAuthorsArray);
         } catch (err) {
-            console.error('Błąd pobierania kolekcji:', err);
-            setError('Nie udało się pobrać kolekcji książek.');
+            if (axios.isAxiosError(err) && err.response?.status === 429) {
+                setError('Przekroczono limit zapytań. Spróbuj ponownie za chwilę.');
+            } else {
+                console.error('Błąd pobierania kolekcji:', err);
+                setError('Nie udało się pobrać kolekcji książek.');
+            }
         }
-    };
+    }
 
     useEffect(() => {
         fetchCollectionData();
