@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, {useState} from 'react';
+import {useNavigate, Link} from 'react-router-dom';
 import axios from '../api/axiosConfig';
 
 interface MessageResponse {
@@ -8,11 +8,11 @@ interface MessageResponse {
 
 const RegisterPage: React.FC = () => {
     const [username, setUsername] = useState('');
-    const [email, setEmail]       = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError]       = useState<string>('');
-    const [success, setSuccess]   = useState<string>('');
-    const [loading, setLoading]   = useState<boolean>(false);
+    const [error, setError] = useState<string>('');
+    const [success, setSuccess] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -24,8 +24,8 @@ const RegisterPage: React.FC = () => {
         try {
             const response = await axios.post<MessageResponse>(
                 '/api/auth/signup',
-                { username, email, password },
-                { headers: { 'Content-Type': 'application/json' } }
+                {username, email, password},
+                {headers: {'Content-Type': 'application/json'}}
             );
             setSuccess(response.data.message);
             setTimeout(() => navigate('/login'), 1500);
@@ -38,12 +38,12 @@ const RegisterPage: React.FC = () => {
     };
 
     return (
-        <div className="vista-card" style={{ maxWidth: 400, margin: '100px auto' }}>
-            <h2 style={{ color: '#fff', textAlign: 'center' }}>Rejestracja</h2>
-            {error   && <div style={{ color: 'red',   marginBottom: 10, textAlign: 'center' }}>{error}</div>}
-            {success && <div style={{ color: 'lime',  marginBottom: 10, textAlign: 'center' }}>{success}</div>}
+        <div className="vista-card">
+            <h2 style={{color: '#fff', textAlign: 'center'}}>Rejestracja</h2>
+            {error && <div style={{color: 'red', marginBottom: 10, textAlign: 'center'}}>{error}</div>}
+            {success && <div style={{color: 'lime', marginBottom: 10, textAlign: 'center'}}>{success}</div>}
             <form onSubmit={handleSubmit}>
-                <div style={{ marginBottom: 10 }}>
+                <div style={{marginBottom: 10}}>
                     <input
                         className="vista-input"
                         type="text"
@@ -55,7 +55,7 @@ const RegisterPage: React.FC = () => {
                         maxLength={20}
                     />
                 </div>
-                <div style={{ marginBottom: 10 }}>
+                <div style={{marginBottom: 10}}>
                     <input
                         className="vista-input"
                         type="email"
@@ -66,7 +66,7 @@ const RegisterPage: React.FC = () => {
                         maxLength={50}
                     />
                 </div>
-                <div style={{ marginBottom: 10 }}>
+                <div style={{marginBottom: 10}}>
                     <input
                         className="vista-input"
                         type="password"
@@ -82,14 +82,14 @@ const RegisterPage: React.FC = () => {
                     type="submit"
                     className="vista-button"
                     disabled={loading}
-                    style={{ width: '100%', marginBottom: 10 }}
+                    style={{width: '100%', marginBottom: 10}}
                 >
                     {loading ? 'Rejestruję...' : 'Zarejestruj się'}
                 </button>
             </form>
-            <div style={{ textAlign: 'center', marginTop: 16 }}>
-                <span style={{ color: '#fff' }}>Masz już konto?</span>
-                <Link to="/login" className="vista-button" style={{ marginLeft: 8, padding: '6px 12px' }}>
+            <div style={{textAlign: 'center', marginTop: 16}}>
+                <span style={{color: '#fff'}}>Masz już konto?</span>
+                <Link to="/login" className="vista-button" style={{marginLeft: 8, padding: '6px 12px'}}>
                     Zaloguj się
                 </Link>
             </div>

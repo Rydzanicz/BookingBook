@@ -1,208 +1,145 @@
 html, body, #root {
-  height: 100%;
-  margin: 0;
+    height: 100%;
+    margin: 0;
 }
 
 body {
-  background-color: #121212;
-  background-image: url('./assets/book-background.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  color: #e0e0e0;
+    background-color: #121212;
+    background-image: url('./assets/book-background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: #e0e0e0;
 }
 
 .vista-window {
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
-  padding: 24px;
-  color: #fff;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+    padding: 24px;
+    color: #fff;
 }
 
 .vista-card {
-  background: rgba(0, 0, 0, 0.4);
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    background: rgba(0, 05, 0, 0.4);
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    maxWidth: 80%;
 }
 
 .vista-input {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 6px;
-  color: #e0e0e0;
-  padding: 8px;
-  font-size: 16px;
-  width: 95%;
-  backdrop-filter: blur(5px);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    color: #e0e0e0;
+    padding: 8px;
+    font-size: 16px;
+    width: 95%;
+    backdrop-filter: blur(5px);
 }
 
 .vista-button {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 6px;
-  color: #fff;
-  padding: 8px 16px;
-  cursor: pointer;
-  font-size: 16px;
-  max-width: 146px;
-  transition: background 0.3s;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    color: #fff;
+    text-align: center;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 16px;
+    max-width: 146px;
+    transition: background 0.3s;
 }
 
 .vista-button:disabled {
-  background: rgba(255, 255, 255, 0.05);
-  cursor: not-allowed;
+    background: rgba(255, 255, 255, 0.05);
+    cursor: not-allowed;
 }
 
 .vista-button:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.vista-table-container {
-  max-height: 60vh;
-  overflow-y: auto;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  margin-top: 16px;
-}
-
-.vista-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.vista-table th {
-  position: sticky;
-  top: 0;
-  background: rgba(0, 0, 0, 0.7);
-  color: #fff;
-  padding: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  text-align: left;
-  z-index: 2;
-}
-
-.vista-table td {
-  padding: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  color: #e0e0e0;
-}
-
-.vista-table tbody tr:nth-child(even) {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.vista-table tbody tr:nth-child(odd) {
-  background: rgba(0, 0, 0, 0.3);
-}
-
-.vista-table tbody tr:hover {
-  background: rgba(255, 255, 255, 0.1);
-  cursor: pointer;
-}
-
-.vista-table .expandable {
-  display: none;
-}
-
-.vista-table tbody tr.expanded + tr.expandable {
-  display: table-row;
-  background: rgba(0, 0, 0, 0.5);
-}
-
-.vista-table tbody tr.expandable td {
-  padding: 16px;
-  font-style: italic;
-  color: #ccc;
-}
-
-.vista-table-container::-webkit-scrollbar {
-  width: 8px;
-}
-
-.vista-table-container::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 4px;
-}
-
-.vista-table-container::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
-}
-
-.vista-table-container::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.2);
 }
 
 :root {
-  --vista-header-bg: rgba(18, 18, 24, 0.85);
-  --vista-header-blur: 16px;
-  --vista-header-shadow: 0 4px 16px rgba(0, 0, 0, 0.8);
-  --vista-header-border: 1px solid rgba(255, 255, 255, 0.1);
-  --vista-header-radius: 0 0 12px 12px;
-  --vista-link-color: #e0e0e0;
-  --vista-link-active: #80E6B3;
-  --vista-link-active-bg: rgba(128, 230, 179, 0.15);
-  --vista-link-hover-bg: rgba(255, 255, 255, 0.08);
-  --vista-btn-bg: rgba(34, 34, 40, 0.8);
-  --vista-btn-hover-bg: rgba(48, 48, 60, 0.9);
-  --vista-btn-border: 1px solid rgba(255, 255, 255, 0.2);
-  --vista-btn-shadow: 0 0 8px rgba(128, 230, 179, 0.4);
+    --vista-header-bg: rgba(18, 18, 24, 0.85);
+    --vista-header-blur: 16px;
+    --vista-header-shadow: 0 4px 16px rgba(0, 0, 0, 0.8);
+    --vista-header-border: 1px solid rgba(255, 255, 255, 0.1);
+    --vista-header-radius: 0 0 12px 12px;
+    --vista-link-color: #e0e0e0;
+    --vista-link-active: #80E6B3;
+    --vista-link-active-bg: rgba(128, 230, 179, 0.15);
+    --vista-link-hover-bg: rgba(255, 255, 255, 0.08);
+    --vista-btn-bg: rgba(34, 34, 40, 0.8);
+    --vista-btn-hover-bg: rgba(48, 48, 60, 0.9);
+    --vista-btn-border: 1px solid rgba(255, 255, 255, 0.2);
+    --vista-btn-shadow: 0 0 8px rgba(128, 230, 179, 0.4);
 }
 
 .vista-header {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 24px;
-  background: var(--vista-header-bg);
-  backdrop-filter: blur(var(--vista-header-blur));
-  -webkit-backdrop-filter: blur(var(--vista-header-blur));
-  border-bottom: var(--vista-header-border);
-  box-shadow: var(--vista-header-shadow);
-  border-radius: var(--vista-header-radius);
-  z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    background: var(--vista-header-bg);
+    backdrop-filter: blur(var(--vista-header-blur));
+    -webkit-backdrop-filter: blur(var(--vista-header-blur));
+    border-bottom: var(--vista-header-border);
+    box-shadow: var(--vista-header-shadow);
+    border-radius: var(--vista-header-radius);
+    z-index: 1000;
 }
 
 .vista-nav {
-  display: flex;
-  gap: 20px;
+    display: flex;
+    gap: 20px;
 }
 
 .vista-link {
-  color: var(--vista-link-color);
-  text-decoration: none;
-  font-size: 1rem;
-  padding: 6px 10px;
-  border-radius: 4px;
-  transition: background 0.2s, color 0.2s;
+    color: var(--vista-link-color);
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 6px 10px;
+    border-radius: 4px;
+    transition: background 0.2s, color 0.2s;
 }
+
 .vista-link:hover {
-  background: var(--vista-link-hover-bg);
+    background: var(--vista-link-hover-bg);
 }
+
 .vista-link.active {
-  color: var(--vista-link-active);
-  background: var(--vista-link-active-bg);
+    color: var(--vista-link-active);
+    background: var(--vista-link-active-bg);
 }
 
 .vista-button {
-  background: var(--vista-btn-bg);
-  border: var(--vista-btn-border);
-  border-radius: 6px;
-  padding: 6px 16px;
-  color: #e0e0e0;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: background 0.2s, box-shadow 0.2s;
+    background: var(--vista-btn-bg);
+    border: var(--vista-btn-border);
+    border-radius: 6px;
+    padding: 6px 16px;
+    color: #e0e0e0;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
 }
+
 .vista-button:hover {
-  background: var(--vista-btn-hover-bg);
-  box-shadow: var(--vista-btn-shadow);
+    background: var(--vista-btn-hover-bg);
+    box-shadow: var(--vista-btn-shadow);
+}
+
+.vista-table th,
+.vista-table td {
+    width: 50px;
+    max-width: 50px;
 }

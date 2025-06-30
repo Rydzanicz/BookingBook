@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import axios from '../api/axiosConfig';
 
 interface Book {
@@ -49,7 +49,7 @@ const BookTable: React.FC<BookTableProps> = ({
                 pdfAcsTokenLink: book.pdfAcsTokenLink
             };
             let response;
-            switch(apiType) {
+            switch (apiType) {
                 case 'DELETE':
                     response = await axios.delete(apiPath, {
                         data: requestData
@@ -80,7 +80,7 @@ const BookTable: React.FC<BookTableProps> = ({
     if (books.length === 0) return null;
 
     return (
-        <div>
+        <div className={'vista-table'}>
             {message && (
                 <div
                     style={{
@@ -101,9 +101,6 @@ const BookTable: React.FC<BookTableProps> = ({
                     <th style={cellStyle}>Data publikacji</th>
                     <th style={cellStyle}>Opis</th>
                     <th style={cellStyle}>Akcja</th>
-                    {books.some(book => book.pdfAcsTokenLink) && (
-                        <th style={cellStyle}>Pobierz</th>
-                    )}
                 </tr>
                 </thead>
                 <tbody>
@@ -125,26 +122,18 @@ const BookTable: React.FC<BookTableProps> = ({
                         <td style={cellStyle}>
                             <button
                                 className="vista-button"
-                                style={{padding: '6px 12px', fontSize: 14}}
                                 onClick={() => handleAction(book)}
-                            >
+                                style={{marginRight: 8}}>
                                 {buttonLabel}
                             </button>
-                        </td>
-                        {book.pdfAcsTokenLink && (
-                            <td style={cellStyle}>
+                            {book.pdfAcsTokenLink && (
                                 <button
                                     className="vista-button"
-                                    style={{padding: '6px 12px', fontSize: 14}}
-                                    onClick={() => handleDownload(book.pdfAcsTokenLink!)}
-                                >
+                                    onClick={() => handleDownload(book.pdfAcsTokenLink!)}>
                                     Pobierz plik
                                 </button>
-                            </td>
-                        )}
-                        {!book.pdfAcsTokenLink && books.some(b => b.pdfAcsTokenLink) && (
-                            <td style={cellStyle}></td>
-                        )}
+                            )}
+                        </td>
                     </tr>
                 ))}
                 </tbody>

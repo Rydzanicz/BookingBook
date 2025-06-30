@@ -1,7 +1,7 @@
-import React, { useState, FormEvent, ChangeEvent, useCallback } from 'react';
+import React, {useState, FormEvent, ChangeEvent, useCallback} from 'react';
 import axios from '../api/axiosConfig';
 import BookTable from './BookTable';
-import { useInfiniteScroll } from '../hooks/useInfiniteScroll';
+import {useInfiniteScroll} from '../hooks/useInfiniteScroll';
 
 interface Book {
     googleBookId: string;
@@ -67,7 +67,7 @@ const BookSearch: React.FC = () => {
         }
     }, [query, page, hasMore, loading, fetchBooks]);
 
-    const { isFetching } = useInfiniteScroll({ fetchMore, hasMore, loading });
+    const {isFetching} = useInfiniteScroll({fetchMore, hasMore, loading});
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         setQuery(e.target.value);
@@ -79,25 +79,25 @@ const BookSearch: React.FC = () => {
     };
 
     return (
-        <div style={{ maxWidth: 800, margin: '0 auto', padding: 16 }}>
-            <form onSubmit={handleSearch} style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+        <div className="vista-card">
+            <form onSubmit={handleSearch} style={{display: 'flex', gap: 8, marginBottom: 16}}>
                 <input
                     type="text"
                     placeholder="Wpisz tytuł książki..."
                     value={query}
+                    className={'vista-input'}
                     onChange={handleInputChange}
-                    style={{ flex: 1, padding: 8, fontSize: 16 }}
+                    style={{flex: 1, padding: 8, fontSize: 16}}
                 />
                 <button
                     type="submit"
                     disabled={loading || !query.trim()}
-                    style={{ padding: '8px 16px' }}
-                >
+                    className="vista-button">
                     {loading ? 'Szukam...' : 'Szukaj'}
                 </button>
             </form>
 
-            {error && <div style={{ color: 'red', marginBottom: 16 }}>{error}</div>}
+            {error && <div style={{color: 'red', marginBottom: '16px'}}>{error}</div>}
 
             <BookTable
                 books={books}
@@ -108,13 +108,13 @@ const BookSearch: React.FC = () => {
             />
 
             {(loading || isFetching) && (
-                <div style={{ textAlign: 'center', padding: 20, color: '#555' }}>
+                <div style={{textAlign: 'center', padding: '20px', color: '#555'}}>
                     Ładowanie...
                 </div>
             )}
 
             {!hasMore && books.length > 0 && (
-                <div style={{ textAlign: 'center', padding: 20, color: '#555' }}>
+                <div style={{textAlign: 'center', padding: '20px', color: '#555'}}>
                     Koniec wyników
                 </div>
             )}

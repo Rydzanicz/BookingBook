@@ -47,7 +47,7 @@ const CollectionPage: React.FC = () => {
     return (
         <>
             <Header/>
-            <div className="vista-card" style={{maxWidth: 800, margin: '40px auto', padding: 24}}>
+            <div className="vista-card">
                 <h2 style={{color: '#fff', marginBottom: 12}}>Moja kolekcja</h2>
 
                 {error && <div style={{color: 'red', marginBottom: 16}}>{error}</div>}
